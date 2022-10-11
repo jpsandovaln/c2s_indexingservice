@@ -6,7 +6,6 @@ const CREATE = process.env.MESSAGE_QUEUE_CREATE || 'CREATE_ASSET';
 const UPDATE = process.env.MESSAGE_QUEUE_UPDATE || 'UPDATE_ASSET';
 const DELETE = process.env.MESSAGE_QUEUE_DELETE || 'DELETE_ASSET';
 
-
 export class AssetsConsumer extends CommonConsumer {
 
   constructor() {
@@ -22,18 +21,18 @@ export class AssetsConsumer extends CommonConsumer {
   private async assertQueueCreate() {
     await this.channel.assertQueue(CREATE);
     this.channel.consume(CREATE,async (message: any) => {
-      const id = JSON.parse(message.content.toString());
+      const asset = JSON.parse(message.content.toString());
       const assetService: ICollectionIndex = new AssetService();
-      assetService.addIndex(id);
+      assetService.addIndex(asset.id);
     })
   }
 
   private async assertQueueUpdate() {
     await this.channel.assertQueue(UPDATE);
     this.channel.consume(UPDATE,async (message: any) => {
-      const id = JSON.parse(message.content.toString());
+      const asset = JSON.parse(message.content.toString());
       const assetService: ICollectionIndex = new AssetService();
-      assetService.updateIndex(id);
+      assetService.updateIndex(asset.id);
     })
   }
 

@@ -19,7 +19,7 @@ services:
     networks:
       - app-network
   
-  rabbitmq:
+  rabbitmq_c2s:
     container_name: rabbitmq_c2s
     ports:
       - "15672:15672"
@@ -29,7 +29,7 @@ services:
       - app-network
 
 # Elasticsearch
-  kibana:
+  kibana_c2s:
     container_name: kibana_c2s
     image: docker.elastic.co/kibana/kibana:7.3.0
     networks:
@@ -42,7 +42,7 @@ services:
         max-file: "5"
         max-size: "10m"
 
-  elasticsearch:
+  elasticsearch_c2s:
     container_name: elasticsearch_c2s
     environment:
       - "discovery.type=single-node"

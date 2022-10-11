@@ -43,7 +43,6 @@ class App {
   public startMessageBroker() {
     this.addConsumers();
     this.consumers.forEach((consumer: CommonConsumer) => {
-      consumer.consumeMessages();
       console.log(`Consumer configured for ${consumer.getName()}`);
     });
   }
