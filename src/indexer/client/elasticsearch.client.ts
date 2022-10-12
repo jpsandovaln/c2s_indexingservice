@@ -1,6 +1,9 @@
 import { Client } from '@elastic/elasticsearch';
 
-const url: string = process.env.ELEASTICSEARCH_URL || "http://localhost";
+const elasticSearchUrl: string = process.env.ELEASTICSEARCH_URL || "http://localhost";
+const elasticSearchPort: string = process.env.ELEASTICSEARCH_PORT || "9200";
+
+const url: string =`${elasticSearchUrl}:${elasticSearchPort}`;
 
 export class ElasticSearchClient {
   private _client: Client;

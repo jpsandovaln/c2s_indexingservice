@@ -1,6 +1,5 @@
-import { AssetService } from '../../services/assets/asset.service';
-import { ICollectionIndex } from '../../services/common/common.interface';
 import { CommonConsumer } from '../common/common.consumer';
+import { assetsIndexer as indexer } from '../../indexer/assets';
 
 const CREATE = process.env.MESSAGE_QUEUE_CREATE || 'CREATE_ASSET';
 const UPDATE = process.env.MESSAGE_QUEUE_UPDATE || 'UPDATE_ASSET';
@@ -22,8 +21,7 @@ export class AssetsConsumer extends CommonConsumer {
     await this.channel.assertQueue(CREATE);
     this.channel.consume(CREATE,async (message: any) => {
       const asset = JSON.parse(message.content.toString());
-      const assetService: ICollectionIndex = new AssetService();
-      assetService.addIndex(asset.id);
+      indexer.index(asset.id);
     })
   }
 
@@ -31,17 +29,15 @@ export class AssetsConsumer extends CommonConsumer {
     await this.channel.assertQueue(UPDATE);
     this.channel.consume(UPDATE,async (message: any) => {
       const asset = JSON.parse(message.content.toString());
-      const assetService: ICollectionIndex = new AssetService();
-      assetService.updateIndex(asset.id);
+      indexer.index(asset.id);
     })
   }
 
   private async assertQueueDelete() {
     await this.channel.assertQueue(DELETE);
     this.channel.consume(DELETE,async (message: any) => {
-      const id = JSON.parse(message.content.toString());
-      const assetService: ICollectionIndex = new AssetService();
-      assetService.deleteIndex(id);
+      const asset = JSON.parse(message.content.toString());
+      indexer.remove(asset.id)
     })
   }
 }
