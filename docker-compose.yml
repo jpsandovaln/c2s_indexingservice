@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  indexingservice:
+    container_name: indexingservice
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    environment:
+      - SERVER_PORT
+      - RABBITMQ_URL   
+      - MESSAGE_QUEUE_CREATE
+      - MESSAGE_QUEUE_UPDATE
+      - MESSAGE_QUEUE_DELETE
+      - MESSAGE_QUEUE_RPC_CREATE
+      - MESSAGE_QUEUE_RPC_UPDATE
+      - MESSAGE_QUEUE_RPC_DELETE
+      - ELEASTICSEARCH_URL
+      - ELEASTICSEARCH_PORT
+      - APOLLO_SERVER_URL
+      - APOLLO_API_KEY
+    networks:
+      - app-network
+  
+  rabbitmq_c2s:
+    container_name: rabbitmq_c2s
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    image: 'rabbitmq:3.7.4'
+    networks:
+      - app-network
+
+# Elasticsearch
+  kibana_c2s:
+    container_name: kibana_c2s
+    image: docker.elastic.co/kibana/kibana:7.3.0
+    networks:
+      - app-network
+    ports:
+      - 5601:5601
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+  elasticsearch_c2s:
+    container_name: elasticsearch_c2s
+    environment:
+      - "discovery.type=single-node"
+      - "MAX_CLAUSE_COUNT=4096"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" 
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.0
+    networks:
+      - app-network
+    ports:
+      - ${ELEASTICSEARCH_PORT}:${ELEASTICSEARCH_PORT}
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+
+
+networks:
+  app-network:
+    driver: bridge
