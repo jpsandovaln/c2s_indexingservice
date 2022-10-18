@@ -20,7 +20,7 @@ export class Indices {
       await indexer.createIndex();
       await indexer.addMapping();
       console.info(`Index [${indexName}] was created.`);
-      //await indexer.indexDocuments();
+      await indexer.indexDocuments();
     });
   }
 }

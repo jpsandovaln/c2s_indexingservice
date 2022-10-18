@@ -8,8 +8,8 @@ export class AssetsRoutes extends CommonRoutes {
   }
 
   configureRoutes(): express.Application {
-    this.app.route('/reindex').post(AssetsController.reIndex);
-    this.app.route('/assets/:assetId')
+    this.app.route('/api/v1/reindex').post(AssetsController.reIndex);
+    this.app.route('/api/v1/assets/:assetId')
       .post(AssetsController.addIndex)
       .put(AssetsController.updateIndex)
       .delete(AssetsController.deleteIndex);

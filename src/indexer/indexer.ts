@@ -1,5 +1,5 @@
 import { ElasticSearchClient } from "./client/elasticsearch.client";
-import flatten from 'flat';
+import * as flatten from 'flat';
 import { indexDocs, createIndices, addMappingES7 } from '@searchkit/cli/lib/lib';
 
 export class Indexer {

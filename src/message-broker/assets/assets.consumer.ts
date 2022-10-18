@@ -19,25 +19,25 @@ export class AssetsConsumer extends CommonConsumer {
 
   private async assertQueueCreate() {
     await this.channel.assertQueue(CREATE);
-    this.channel.consume(CREATE,async (message: any) => {
+    this.channel.consume(CREATE, (message: any) => {
       const asset = JSON.parse(message.content.toString());
-      indexer.index(asset.id);
+      indexer.index(asset.assetID);
     })
   }
 
   private async assertQueueUpdate() {
     await this.channel.assertQueue(UPDATE);
-    this.channel.consume(UPDATE,async (message: any) => {
+    this.channel.consume(UPDATE, (message: any) => {
       const asset = JSON.parse(message.content.toString());
-      indexer.index(asset.id);
+      indexer.index(asset.assetID);
     })
   }
 
   private async assertQueueDelete() {
     await this.channel.assertQueue(DELETE);
-    this.channel.consume(DELETE,async (message: any) => {
+    this.channel.consume(DELETE, (message: any) => {
       const asset = JSON.parse(message.content.toString());
-      indexer.remove(asset.id)
+      indexer.remove(asset.assetID)
     })
   }
 }

@@ -3,39 +3,47 @@ import { ApolloServerClient } from '../client/apollo.client';
 
 const GET_ALL_ASSETS = gql`
   query {
-    allRooms {
-      _id: asset_id
-      _tenantName
-      description
-      type
-      name
-      state
-      capacity
+    assets {
+      assetID
+      previewURL
+      preview(renditionID: "5") {
+        binaryID
+        fileName
+        fileSize
+        fileType
+      }
     }
   }
 `;
 
 const GET_ASSETS_BY_ID = gql`
-  query PersonalInvitationById($id: String!) {
-    personalInvitationById(id: $id) {
-      _id
+  query assetById($assetID: String!) {
+    assetById(assetID: $assetID) {
+      assetID
+      previewURL
+      preview(renditionID: "5") {
+        binaryID
+        fileName
+        fileSize
+        fileType
+      }
     }
   }
 `;
 
-export async function getAssetById(assetId: string) {
+export async function getAssetById(assetID: string) {
   const apolloClient = new ApolloServerClient();
   const { data } = await apolloClient.getClient().query({
     query: GET_ASSETS_BY_ID,
-    variables: { id: assetId },
+    variables: { assetID },
   });
-  return data.personalInvitationById;
+  return data.assetById;
 }
 
 export async function getAllAssets() {
   const apolloClient = new ApolloServerClient();
   const { data } = await apolloClient.getClient().query({
-    query: GET_ALL_ASSETS
+    query: GET_ALL_ASSETS,
   });
-  return data.allRooms;
+  return data.assets;
 }

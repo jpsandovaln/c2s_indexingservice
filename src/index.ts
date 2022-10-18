@@ -5,6 +5,7 @@ import * as cors from 'cors';
 import { AssetsRoutes } from "./api/assets/assets.routes";
 import { CommonRoutes } from "./api/common/common.route";
 import { AssetsConsumer } from "./message-broker/assets/assets.consumer";
+import { AssetsRPCConsumer } from './message-broker/assets/assets.rpc.consumer';
 import { CommonConsumer } from "./message-broker/common/common.consumer";
 
 class App {
@@ -38,6 +39,7 @@ class App {
 
   private addConsumers() {
     this.consumers.push(new AssetsConsumer());
+    this.consumers.push(new AssetsRPCConsumer());
   }
 
   public startMessageBroker() {
